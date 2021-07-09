@@ -1,0 +1,20 @@
+{
+  "name": "command-kafka-msk-iam",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest --collect-coverage"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "kafkajs": "git://github.com/tulios/kafkajs.git#840-allow-injecting-authentication-mechanisms"
+  },
+  "devDependencies": {
+    "jest": "^27.0.6",
+    "mockdate": "^3.0.5"
+  }
+}
