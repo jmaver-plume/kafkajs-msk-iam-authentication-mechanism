@@ -123,18 +123,13 @@ ${crypto.createHash('sha256').update(canonicalRequest).digest('hex')}`
   }
 
   static async generateAccessSecretKeys () {
-    try {
-      const { data: token } = await axios.put('http://169.254.169.254/latest/api/token', undefined, { headers: {
-          "X-aws-ec2-metadata-token-ttl-seconds": 21600
-        }})
-      const { data } = await axios.get('http://169.254.169.254/latest/meta-data/iam/security-credentials/ec2-msk', { headers: {
-          "X-aws-ec2-metadata-token": token
-        }});
-      return data;
-    } catch (err) {
-      console.log('axios err: ', err)
-      throw err;
-    }
+    const { data: token } = await axios.put('http://169.254.169.254/latest/api/token', undefined, { headers: {
+        "X-aws-ec2-metadata-token-ttl-seconds": 21600
+      }})
+    const { data: { SecretAccessKey: secretAccessKey, AccessKeyId: accessKeyId } } = await axios.get('http://169.254.169.254/latest/meta-data/iam/security-credentials/ec2-msk', { headers: {
+        "X-aws-ec2-metadata-token": token
+      }});
+    return { secretAccessKey, accessKeyId }
   }
 }
 

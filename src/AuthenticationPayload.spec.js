@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const nock = require('nock');
 const MockDate = require('mockdate');
 const { AuthenticationPayload } = require('./AuthenticationPayload');
 
@@ -172,6 +173,53 @@ describe('AuthenticationPayload', () => {
       expect(payload).toHaveProperty("x-amz-signedheaders", "host")
       expect(payload).toHaveProperty("x-amz-expires", "900")
       expect(payload).toHaveProperty("x-amz-signature", "568ddcedca116fbd9684f8f48082f36fdb4b27bc3527788dd89dfb1e1c6b9ca2")
+    });
+
+    it('should throw error when missing secret access key', () => {
+      try {
+        instance.generatePayload({ AccessKeyId: 'test' })
+      } catch (err) {
+        expect(err).toBeInstanceOf(Error);
+      }
+    });
+
+    it('should throw error when missing access key', () => {
+      try {
+        instance.generatePayload({ SecretAccessKey: 'test' })
+      } catch (err) {
+        expect(err).toBeInstanceOf(Error);
+      }
+    });
+  });
+
+  describe('generateAccessSecretKeys', () => {
+    it('should return access key and secret token', async () => {
+      const token = 'aaaaaBBBBBBBccccccXXXXXX'
+      const accessKeyId = 'accessKeyId'
+      const secretAccessKey = 'secretAccessKey'
+
+      const tokenScope = nock('http://169.254.169.254', {
+        reqheaders: {
+          "X-aws-ec2-metadata-token-ttl-seconds": 21600
+        }
+      })
+        .put('/latest/api/token', undefined)
+        .reply(200, token)
+
+      const credentialsScope = nock('http://169.254.169.254', {
+        reqheaders: {
+          "X-aws-ec2-metadata-token": token
+        }
+      })
+        .get('/latest/meta-data/iam/security-credentials/ec2-msk')
+        .reply(200, { SecretAccessKey: secretAccessKey, AccessKeyId: accessKeyId })
+
+      const result = await AuthenticationPayload.generateAccessSecretKeys()
+      expect(result).toHaveProperty('accessKeyId', accessKeyId)
+      expect(result).toHaveProperty('secretAccessKey', secretAccessKey)
+
+      expect(tokenScope.isDone()).toBe(true)
+      expect(credentialsScope.isDone()).toBe(true)
     });
   });
 });
