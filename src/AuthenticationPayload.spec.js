@@ -10,11 +10,11 @@ describe('AuthenticationPayload', () => {
   const brokerHost = 'example.com'
   const region = 'us-east-1'
   const accessKeyId = 'accesskeyid'
-  const awsSecretKey = 'secretkey'
+  const secretAccessKey = 'secretkey'
 
   beforeAll(() => {
     MockDate.set('2021-01-01');
-    timestamp = new Date().toISOString().replace(/[-\.:]/g,'')
+    timestamp = new Date().toISOString().replace(/[-.:]/g,'')
       .substring(0, 15)
       .concat("Z");
     instance = new AuthenticationPayload({ brokerHost });
@@ -143,9 +143,9 @@ describe('AuthenticationPayload', () => {
         .mockReturnValueOnce({ update: updateSpy5 })
 
       const stringToSign = 'string'
-      const result = instance.generateSignature(timestamp, region, stringToSign, awsSecretKey);
+      instance.generateSignature(timestamp, region, stringToSign, secretAccessKey);
       expect(spy).toHaveBeenCalledTimes(5)
-      expect(spy).toHaveBeenNthCalledWith(1, "sha256", "AWS4"+awsSecretKey)
+      expect(spy).toHaveBeenNthCalledWith(1, "sha256", "AWS4"+secretAccessKey)
       expect(spy).toHaveBeenNthCalledWith(2, "sha256", dateKey)
       expect(spy).toHaveBeenNthCalledWith(3, "sha256", dateRegionKey)
       expect(spy).toHaveBeenNthCalledWith(4, "sha256", dateRegionServiceKey)
@@ -161,7 +161,7 @@ describe('AuthenticationPayload', () => {
 
   describe('generatePayload', () => {
     it('should return correct value', () => {
-      const payload =  instance.generatePayload({ SecretAccessKey: awsSecretKey, AccessKeyId: accessKeyId })
+      const payload =  instance.generatePayload({ secretAccessKey, accessKeyId })
       expect(payload).toHaveProperty("version", "2020_10_22")
       expect(payload).toHaveProperty("host", brokerHost)
       expect(payload).toHaveProperty("user-agent", "test-api")
@@ -177,7 +177,7 @@ describe('AuthenticationPayload', () => {
 
     it('should throw error when missing secret access key', () => {
       try {
-        instance.generatePayload({ AccessKeyId: 'test' })
+        instance.generatePayload({ accessKeyId })
       } catch (err) {
         expect(err).toBeInstanceOf(Error);
       }
@@ -185,7 +185,7 @@ describe('AuthenticationPayload', () => {
 
     it('should throw error when missing access key', () => {
       try {
-        instance.generatePayload({ SecretAccessKey: 'test' })
+        instance.generatePayload({ secretAccessKey })
       } catch (err) {
         expect(err).toBeInstanceOf(Error);
       }

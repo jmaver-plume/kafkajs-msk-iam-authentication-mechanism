@@ -63,21 +63,22 @@ ${crypto.createHash('sha256').update(canonicalRequest).digest('hex')}`
   }
 
   // TESTED
-  generateCanonicalQueryString (timestamp, credential) {
+  generateCanonicalQueryString (timestamp, credential, token) {
     let canonicalQueryString = "";
     canonicalQueryString += `${encodeURIComponent("Action")}=${encodeURIComponent("kafka-cluster:Connect")}&`;
     canonicalQueryString += `${encodeURIComponent("X-Amz-Algorithm")}=${encodeURIComponent("AWS4-HMAC-SHA256")}&`;
     canonicalQueryString += `${encodeURIComponent("X-Amz-Credential")}=${encodeURIComponent(credential)}&`;
     canonicalQueryString += `${encodeURIComponent("X-Amz-Date")}=${encodeURIComponent(timestamp)}&`;
     canonicalQueryString += `${encodeURIComponent("X-Amz-Expires")}=${encodeURIComponent("900")}&`;
+    canonicalQueryString += `${encodeURIComponent("X-Amz-Security-Token")}=${encodeURIComponent(token)}&`;
     canonicalQueryString += `${encodeURIComponent("X-Amz-SignedHeaders")}=${encodeURIComponent("host")}`;
 
     return canonicalQueryString
   }
 
   // TESTED
-  generateSignature (timestamp, awsRegion, stringToSign, awsSecretKey) {
-    const dateKey = crypto.createHmac('sha256', `AWS4${awsSecretKey}`).update(this.timestampYYYYmmDDFormat(timestamp)).digest()
+  generateSignature (timestamp, awsRegion, stringToSign, secretAccessKey) {
+    const dateKey = crypto.createHmac('sha256', `AWS4${secretAccessKey}`).update(this.timestampYYYYmmDDFormat(timestamp)).digest()
     const dateRegionKey = crypto.createHmac('sha256', dateKey).update(awsRegion).digest()
     const dateRegionServiceKey = crypto.createHmac('sha256', dateRegionKey).update("kafka-cluster").digest()
     const signingKey = crypto.createHmac('sha256', dateRegionServiceKey).update("aws4_request").digest()
@@ -86,26 +87,26 @@ ${crypto.createHash('sha256').update(canonicalRequest).digest('hex')}`
 
   // TESTED
   generatePayload (options) {
-    const { SecretAccessKey, AccessKeyId } = options;
-    if (!SecretAccessKey || !AccessKeyId ) {
+    const { secretAccessKey, accessKeyId, token } = options;
+    if (!secretAccessKey || !accessKeyId || !token) {
       throw new Error ('Missing values');
     }
 
     const hardcodedRegion = 'us-east-1'
     const timestamp = new Date().toISOString()
-      .replace(/[-\.:]/g,'')
+      .replace(/[-.:]/g,'')
       .substring(0, 15)
       .concat("Z")
 
     const signedHeaders = this.generateSignedHeaders(); // very simple
     const hashedPayload = this.generateHashedPayload(); // very simple
     const scope = this.generateScope(hardcodedRegion); // very simple
-    const credential = this.generateCredential(AccessKeyId, timestamp, scope);
+    const credential = this.generateCredential(accessKeyId, timestamp, scope);
     const canonicalHeaders = this.generateCanonicalHeaders(this.brokerHost); // very simple, TODO check if need port or just hostname
-    const canonicalQueryString = this.generateCanonicalQueryString(timestamp, credential); // should be correct
+    const canonicalQueryString = this.generateCanonicalQueryString(timestamp, credential, token); // should be correct
     const canonicalRequest = this.generateCanonicalRequest(canonicalQueryString, canonicalHeaders, signedHeaders, hashedPayload); //
     const stringToSign = this.generateStringToSign(timestamp, scope, canonicalRequest); // done
-    const signature = this.generateSignature(timestamp, hardcodedRegion, stringToSign, SecretAccessKey); //
+    const signature = this.generateSignature(timestamp, hardcodedRegion, stringToSign, secretAccessKey); //
 
     return {
       version: "2020_10_22",
@@ -115,7 +116,7 @@ ${crypto.createHash('sha256').update(canonicalRequest).digest('hex')}`
       "x-amz-credential": credential,
       "x-amz-algorithm": "AWS4-HMAC-SHA256",
       "x-amz-date": timestamp,
-      // "x-amz-security-token": undefined,
+      "x-amz-security-token": token,
       "x-amz-signedheaders": signedHeaders,
       "x-amz-expires": "900",
       "x-amz-signature": signature,
@@ -126,10 +127,12 @@ ${crypto.createHash('sha256').update(canonicalRequest).digest('hex')}`
     const { data: token } = await axios.put('http://169.254.169.254/latest/api/token', undefined, { headers: {
         "X-aws-ec2-metadata-token-ttl-seconds": 21600
       }})
-    const { data: { SecretAccessKey: secretAccessKey, AccessKeyId: accessKeyId } } = await axios.get('http://169.254.169.254/latest/meta-data/iam/security-credentials/ec2-msk', { headers: {
+    const { data } = await axios.get('http://169.254.169.254/latest/meta-data/iam/security-credentials/ec2-msk', { headers: {
         "X-aws-ec2-metadata-token": token
       }});
-    return { secretAccessKey, accessKeyId }
+
+    const { SecretAccessKey: secretAccessKey, AccessKeyId: accessKeyId, Token: sessionToken } = data
+    return { secretAccessKey, accessKeyId, token: sessionToken }
   }
 }
 

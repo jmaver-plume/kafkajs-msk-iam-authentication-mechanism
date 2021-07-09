@@ -12,11 +12,25 @@ const kafka = new Kafka({
   },
 })
 
-const producer = kafka.producer()
-producer.connect()
-  .then(() => producer.send({ topic: 'test1', messages: [{ value: 'test message'}]}))
-  .then(() => producer.disconnect())
-  .catch(err => {
-    console.error('Producer main error: ', err)
-    process.exit(1)
-  })
+function handleProducer () {
+  const producer = kafka.producer()
+  producer.connect()
+    .then(() => producer.send({ topic: 'test1', messages: [{ value: 'test message'}]}))
+    .then(() => producer.disconnect())
+    .catch(err => {
+      console.error('Producer main error: ', err)
+      process.exit(1)
+    })
+}
+
+function handleTopics () {
+  const admin = kafka.admin()
+  admin.connect()
+    .then(() => console.log('topics: ', admin.listTopics()))
+    .catch(err => {
+      console.error('Kafka admin error: ', err)
+      process.exit(1)
+    })
+}
+
+handleTopics()
