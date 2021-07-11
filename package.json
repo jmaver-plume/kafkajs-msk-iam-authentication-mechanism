@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.21.1",
+    "@aws-sdk/signature-v4": "^3.20.0",
     "dotenv": "^10.0.0",
     "kafkajs": "git://github.com/tulios/kafkajs.git#840-allow-injecting-authentication-mechanisms"
   },
