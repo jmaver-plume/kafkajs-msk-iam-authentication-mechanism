@@ -62,12 +62,11 @@ const Authenticator = ({ sasl, connection, logger, saslAuthenticate }) => {
     authenticate: async () => {
       const { host, port } = connection
       const broker = `${host}:${port}`
-      const awsMskIam = new AuthenticationPayload({ brokerHost: host })
+      const payloadFactory = new AuthenticationPayload()
 
       try {
         logger.info(`Authenticate with ${sasl.mechanism}`, { broker })
-        const keys = await AuthenticationPayload.generateAccessSecretKeys();
-        const payload = await awsMskIam.generatePayload(keys);
+        const payload = await payloadFactory.create({ brokerHost: host });
         console.log('Authenticate event #1', payload)
         const authenticateResponse = await saslAuthenticate({ request: request(JSON.stringify(payload)), response });
         console.log('Authenticate event #2', authenticateResponse)
