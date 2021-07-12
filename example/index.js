@@ -1,17 +1,17 @@
 require('dotenv').config()
 const { Kafka, AuthenticationMechanisms } = require('kafkajs')
 const AWS_MSK_IAM_MECHANISM = 'AWS_MSK_IAM'
-AuthenticationMechanisms[AWS_MSK_IAM_MECHANISM] = () => require('../src/index');
+AuthenticationMechanisms[AWS_MSK_IAM_MECHANISM] = () => require('../src/sdk');
 
 if (!process.env.BROKERS) {
     console.error('Missing value process.env.BROKERS');
     process.exit(1);
 }
-
-if (!process.env.REGION) {
-    console.error('Missing value process.env.REGION');
-    process.exit(1);
-}
+//
+// if (!process.env.REGION) {
+//     console.error('Missing value process.env.REGION');
+//     process.exit(1);
+// }
 
 const kafka = new Kafka({
     brokers: process.env.BROKERS.split(','),
