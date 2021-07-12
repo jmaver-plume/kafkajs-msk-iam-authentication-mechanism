@@ -2,22 +2,21 @@
   "name": "command-kafka-msk-iam",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/index.js",
+  "main": "src/sdk/index.js",
   "scripts": {
-    "test": "jest --collect-coverage",
-    "start": "node ."
+    "start:example": "node example/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-sts": "^3.21.0",
+    "@aws-sdk/credential-provider-node": "^3.21.0",
+    "@aws-sdk/hash-node": "^3.20.0",
+    "@aws-sdk/signature-v4": "^3.20.0",
     "axios": "^0.21.1",
-    "dotenv": "^10.0.0",
-    "kafkajs": "git://github.com/tulios/kafkajs.git#840-allow-injecting-authentication-mechanisms"
-  },
-  "devDependencies": {
     "jest": "^27.0.6",
-    "mockdate": "^3.0.5",
-    "nock": "^13.1.1"
-  }
+    "sinon": "^11.1.1"
+  },
+  "devDependencies": {}
 }

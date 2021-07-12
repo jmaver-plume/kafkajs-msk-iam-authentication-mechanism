@@ -1,19 +1,10 @@
-const axios = require('axios');
 const crypto = require('crypto');
 
-class AuthenticationPayload {
-  // TESTED
-  constructor(options) {
-    if (!options || typeof options !== "object") {
-      throw new Error('Options need to be supplied to constructor');
-    }
-
-    const { brokerHost } = options;
-    if (!brokerHost) {
-      throw new Error('Missing option value brokerHost');
-    }
-
+class AuthenticationPayloadCreator {
+  constructor(provider, signature, brokerHost) {
     this.brokerHost = brokerHost;
+    this.signature = signature;
+    this.provider = provider;
   }
 
   timestampYYYYmmDDFormat (timestampISOString) {
@@ -77,27 +68,15 @@ ${crypto.createHash('sha256').update(canonicalRequest).digest('hex')}`
   }
 
   // TESTED
-  generateSignature (timestamp, awsRegion, stringToSign, secretAccessKey) {
-    const dateKey = crypto.createHmac('sha256', `AWS4${secretAccessKey}`).update(this.timestampYYYYmmDDFormat(timestamp)).digest()
-    const dateRegionKey = crypto.createHmac('sha256', dateKey).update(awsRegion).digest()
-    const dateRegionServiceKey = crypto.createHmac('sha256', dateRegionKey).update("kafka-cluster").digest()
-    const signingKey = crypto.createHmac('sha256', dateRegionServiceKey).update("aws4_request").digest()
-    return crypto.createHmac('sha256', signingKey).update(stringToSign).digest('hex')
-  }
-
-  // TESTED
-  generatePayload (options) {
-    const { secretAccessKey, accessKeyId, token } = options;
-    if (!secretAccessKey || !accessKeyId || !token) {
-      throw new Error ('Missing values');
-    }
-
+  async create () {
     const hardcodedRegion = 'us-east-1'
-    const timestamp = new Date().toISOString()
+    const now = Date.now();
+    const timestamp = new Date(now).toISOString()
       .replace(/[-.:]/g,'')
       .substring(0, 15)
       .concat("Z")
 
+    const { secretAccessKey, accessKeyId, token } = await this.provider();
     const signedHeaders = this.generateSignedHeaders(); // very simple
     const hashedPayload = this.generateHashedPayload(); // very simple
     const scope = this.generateScope(hardcodedRegion); // very simple
@@ -106,7 +85,7 @@ ${crypto.createHash('sha256').update(canonicalRequest).digest('hex')}`
     const canonicalQueryString = this.generateCanonicalQueryString(timestamp, credential, token); // should be correct
     const canonicalRequest = this.generateCanonicalRequest(canonicalQueryString, canonicalHeaders, signedHeaders, hashedPayload); //
     const stringToSign = this.generateStringToSign(timestamp, scope, canonicalRequest); // done
-    const signature = this.generateSignature(timestamp, hardcodedRegion, stringToSign, secretAccessKey); //
+    const signature = await this.signature.sign(stringToSign, { signingDate: now });
 
     return {
       version: "2020_10_22",
@@ -122,18 +101,6 @@ ${crypto.createHash('sha256').update(canonicalRequest).digest('hex')}`
       "x-amz-signature": signature,
     }
   }
-
-  static async generateAccessSecretKeys () {
-    const { data: token } = await axios.put('http://169.254.169.254/latest/api/token', undefined, { headers: {
-        "X-aws-ec2-metadata-token-ttl-seconds": 21600
-      }})
-    const { data } = await axios.get('http://169.254.169.254/latest/meta-data/iam/security-credentials/ec2-msk', { headers: {
-        "X-aws-ec2-metadata-token": token
-      }});
-
-    const { SecretAccessKey: secretAccessKey, AccessKeyId: accessKeyId, Token: sessionToken } = data
-    return { secretAccessKey, accessKeyId, token: sessionToken }
-  }
 }
 
-module.exports = {AuthenticationPayload}
+module.exports = { AuthenticationPayloadCreator }
