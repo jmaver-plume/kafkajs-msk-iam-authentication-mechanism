@@ -7,7 +7,8 @@ const kafka = new Kafka({
   clientId: 'consumer',
   ssl: true,
   sasl: {
-    mechanism: Type
+    mechanism: Type,
+    region: process.env.REGION
   }
 })
 
