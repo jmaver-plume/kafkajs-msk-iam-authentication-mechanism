@@ -1,14 +1,14 @@
 require('dotenv').config()
 const { Kafka, AuthenticationMechanisms } = require('kafkajs')
-const AWS_MSK_IAM_MECHANISM = 'aws_msk_iam'
-AuthenticationMechanisms[AWS_MSK_IAM_MECHANISM] = () => require('../src/sdk');
+const { Mechanism, Type } = require('../src/sdk');
+AuthenticationMechanisms[Type] = () => Mechanism;
 
 const kafka = new Kafka({
     brokers: process.env.BROKERS.split(','),
     clientId: 'consumer',
     ssl: true,
     sasl: {
-        mechanism: AWS_MSK_IAM_MECHANISM
+        mechanism: Type
     },
 })
 

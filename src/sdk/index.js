@@ -1,2 +1,2 @@
-const authenticator = require('./authenticator');
-module.exports = authenticator;
+const Mechanism = require('./authenticator');
+module.exports = { Mechanism, Type: 'AWS_MSK_IAM' };
