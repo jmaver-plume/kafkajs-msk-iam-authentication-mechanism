@@ -29,25 +29,19 @@ const Mechanism = ({ sasl, connection, logger, saslAuthenticate }) => {
     authenticate: async () => {
       const { host, port } = connection
       const broker = `${host}:${port}`
-      // console.log('region: ', sasl.region);
-      const payloadFactory = new AuthenticationPayloadCreator({ region: 'us-east-1' })
+      const payloadFactory = new AuthenticationPayloadCreator({ region: sasl.region })
 
       try {
         const payload = await payloadFactory.create({ brokerHost: host })
-        console.log('Authenticate event #1', payload)
         const authenticateResponse = await saslAuthenticate({ request: request(payload), response })
-        console.log('Authenticate event #2', authenticateResponse)
+        logger.info('Authentication response', { authenticateResponse })
 
-        // TODO: Response should equal payload or whatever?
-        // if (authenticateResponse !== expectedResponse) {
-        //   throw new Error("Mismatching response from broker")
-        // }
+        if (!authenticateResponse.version || !authenticateResponse['request-id']) {
+          throw new Error('Invalid response from broker')
+        }
 
         logger.info('SASL Simon authentication successful', { broker })
-      } catch (e) {
-        const error = new Error(
-                    `SASL ${sasl} authentication failed: ${e.message}`
-        )
+      } catch (error) {
         logger.error(error.message, { broker })
         throw error
       }

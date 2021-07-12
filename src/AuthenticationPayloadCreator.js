@@ -10,7 +10,6 @@ const HASHED_PAYLOAD = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b
 const ALGORITHM = 'AWS4-HMAC-SHA256'
 const ACTION = 'kafka-cluster:Connect'
 const EXPIRES_IN = '900'
-const VERSION = '2020_10_22'
 
 class AuthenticationPayloadCreator {
   constructor ({ region }) {
@@ -99,14 +98,11 @@ ${createHash('sha256').update(canonicalRequest, 'utf8').digest('hex')}`
     )
 
     const signature = await this.signature.sign(stringToSign, {
-      signingDate: new Date(now).toISOString(),
-      signingService: SERVICE
+      signingDate: new Date(now).toISOString()
     })
 
-    console.log('sign: ', signature)
-
     return {
-      version: VERSION,
+      version: '2020_10_22',
       'user-agent': 'test-api',
       host: brokerHost,
       action: ACTION,
