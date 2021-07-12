@@ -3,6 +3,7 @@
 /.idea/
 .env
 .DS_Store
+/src/.DS_Store
 
 /example/node_modules/
 /example/coverage/
