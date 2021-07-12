@@ -37,9 +37,9 @@ class AuthenticationPayloadCreator {
     timestampYYYYmmDDTHHMMSSZFormat (date) {
         const d = new Date(date);
         return d.toISOString()
-            .replace(/[-.:]/g,'')
-            .substring(0, 15)
-            .concat("Z")
+          .replace(/[-.:]/g,'')
+          .substring(0, 15)
+          .concat("Z")
     }
 
     generateCanonicalHeaders (brokerHost) {
@@ -72,11 +72,11 @@ ${createHash('sha256').update(canonicalRequest, 'utf8').digest('hex')}`
 
     generateCanonicalRequest (canonicalQueryString, canonicalHeaders, signedHeaders, hashedPayload) {
         return "GET\n"+
-            "/\n"+
-            canonicalQueryString+"\n"+
-            canonicalHeaders+"\n"+
-            signedHeaders+"\n"+
-            hashedPayload
+          "/\n"+
+          canonicalQueryString+"\n"+
+          canonicalHeaders+"\n"+
+          signedHeaders+"\n"+
+          hashedPayload
     };
 
     // TESTED
@@ -94,11 +94,16 @@ ${createHash('sha256').update(canonicalRequest, 'utf8').digest('hex')}`
         const canonicalQueryString = this.generateCanonicalQueryString(this.timestampYYYYmmDDTHHMMSSZFormat(now), xAmzCredential, sessionToken);
         const canonicalRequest = this.generateCanonicalRequest(canonicalQueryString, canonicalHeaders, SIGNED_HEADERS, HASHED_PAYLOAD); //
         const stringToSign = this.generateStringToSign(
-            now,
-            canonicalRequest
+          now,
+          canonicalRequest
         );
 
-        const signature = await this.signature.sign(stringToSign, { signingDate: now })
+        const signature = await this.signature.sign(stringToSign, {
+            signingDate: new Date(now).toISOString(),
+            signingService: SERVICE,
+        })
+
+        console.log('sign: ', signature)
 
         return {
             version: VERSION,

@@ -1,9 +1,9 @@
-const { createHash } = require("crypto");
+const { createHmac } = require("crypto");
 
 const Sha256HashConstructor = class {
     sha256
-    constructor() {
-        this.sha256 = createHash('sha256');
+    constructor(signingKey) {
+        this.sha256 = createHmac('sha256', signingKey);
     }
 
     digest() {

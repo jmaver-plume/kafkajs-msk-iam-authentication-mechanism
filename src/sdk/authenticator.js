@@ -33,6 +33,7 @@ const authenticator = ({ sasl, connection, logger, saslAuthenticate }) => {
             const payloadFactory = new AuthenticationPayloadCreator({ region: 'us-east-1' })
 
             try {
+
                 const payload = await payloadFactory.create({ brokerHost: host });
                 console.log('Authenticate event #1', payload)
                 const authenticateResponse = await saslAuthenticate({ request: request(payload), response });
