@@ -8,12 +8,17 @@ if (!process.env.BROKERS) {
     process.exit(1);
 }
 
+if (!process.env.REGION) {
+    console.error('Missing value process.env.REGION');
+    process.exit(1);
+}
+
 const kafka = new Kafka({
     brokers: process.env.BROKERS.split(','),
     clientId: 'consumer',
     ssl: true,
     sasl: {
-        mechanism: AWS_MSK_IAM_MECHANISM,
+        mechanism: 'AWS_MSK_IAM'
     },
 })
 

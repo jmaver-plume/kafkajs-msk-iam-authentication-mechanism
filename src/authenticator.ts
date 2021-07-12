@@ -5,7 +5,7 @@ type Options = {
     region: string;
 }
 
-const Authenticator: AuthenticationMechanismCreator<Options, any> = ({ sasl, connection, logger, saslAuthenticate }) => {
+const authenticator: AuthenticationMechanismCreator<Options, any> = ({ sasl, connection, logger, saslAuthenticate }) => {
     const INT32_SIZE = 4
 
     const request = (payload: AuthenticationPayload) => ({
@@ -34,6 +34,7 @@ const Authenticator: AuthenticationMechanismCreator<Options, any> = ({ sasl, con
         authenticate: async () => {
             const { host, port } = connection
             const broker = `${host}:${port}`
+            console.log('region: ', sasl.region);
             const payloadFactory = new AuthenticationPayloadCreator({ region: sasl.region })
 
             try {
@@ -59,4 +60,4 @@ const Authenticator: AuthenticationMechanismCreator<Options, any> = ({ sasl, con
     }
 }
 
-module.exports = Authenticator
+export default authenticator
