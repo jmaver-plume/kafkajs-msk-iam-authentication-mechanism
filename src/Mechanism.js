@@ -21,7 +21,7 @@ const Mechanism = ({ sasl, connection, logger, saslAuthenticate }) => {
     },
 
     parse: (data) => {
-      return data.toString()
+      return JSON.parse(data.toString())
     }
   }
 
@@ -36,7 +36,7 @@ const Mechanism = ({ sasl, connection, logger, saslAuthenticate }) => {
         const authenticateResponse = await saslAuthenticate({ request: request(payload), response })
         logger.info('Authentication response', { authenticateResponse })
 
-        if (!authenticateResponse.version || !authenticateResponse['request-id']) {
+        if (!authenticateResponse.version || !authenticateResponse) {
           throw new Error('Invalid response from broker')
         }
 
