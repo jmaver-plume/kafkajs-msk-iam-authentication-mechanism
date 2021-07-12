@@ -1,5 +1,10 @@
+# Kafka MSK IAM integration
+
+## Installation
+
+```javascript
 const { Kafka, AuthenticationMechanisms } = require('kafkajs')
-const { Mechanism, Type } = require('../src')
+const { Mechanism, Type } = require('kafka-msk-iam-demo')
 AuthenticationMechanisms[Type] = () => Mechanism
 
 const kafka = new Kafka({
@@ -26,3 +31,5 @@ run()
     console.error('Error: ', err)
     process.exit(1)
   })
+
+```
