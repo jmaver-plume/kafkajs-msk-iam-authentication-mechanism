@@ -1,4 +1,4 @@
-import { createHash } from "crypto";
+const { createHash } = require("crypto");
 
 export const Sha256HashConstructor = class {
     sha256
