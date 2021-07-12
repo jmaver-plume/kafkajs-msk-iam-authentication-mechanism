@@ -1,6 +1,6 @@
 const { createHash } = require("crypto");
 
-export const Sha256HashConstructor = class {
+const Sha256HashConstructor = class {
     sha256
     constructor() {
         this.sha256 = createHash('sha256');
@@ -19,3 +19,5 @@ export const Sha256HashConstructor = class {
         this.sha256.update(toHash);
     }
 }
+
+module.exports = { Sha256HashConstructor }
