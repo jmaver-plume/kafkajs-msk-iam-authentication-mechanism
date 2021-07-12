@@ -1,6 +1,5 @@
-require('dotenv').config()
 const { Kafka, AuthenticationMechanisms } = require('kafkajs')
-const { Mechanism, Type } = require('../src/sdk');
+const { Mechanism, Type } = require('../src');
 AuthenticationMechanisms[Type] = () => Mechanism;
 
 const kafka = new Kafka({

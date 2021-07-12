@@ -3,14 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^10.0.0",
     "kafkajs": "git://github.com/tulios/kafkajs.git#840-allow-injecting-authentication-mechanisms"
   }
 }
