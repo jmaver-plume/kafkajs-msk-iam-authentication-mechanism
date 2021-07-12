@@ -1,7 +1,7 @@
 require('dotenv').config()
 const { Kafka, AuthenticationMechanisms } = require('kafkajs')
 const AWS_MSK_IAM_MECHANISM = 'AWS_MSK_IAM'
-AuthenticationMechanisms[AWS_MSK_IAM_MECHANISM] = () => require('../build/main');
+AuthenticationMechanisms[AWS_MSK_IAM_MECHANISM] = () => require('../src/index');
 
 if (!process.env.BROKERS) {
     console.error('Missing value process.env.BROKERS');
@@ -22,7 +22,7 @@ const kafka = new Kafka({
     },
 })
 
-function listTopics () {
+function index () {
     const admin = kafka.admin()
     admin.connect()
         .then(() => console.log('topics: ', admin.listTopics()))
@@ -32,4 +32,4 @@ function listTopics () {
         })
 }
 
-listTopics()
+index()

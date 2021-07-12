@@ -4,7 +4,7 @@
   "description": "",
   "main": "./src/index.js",
   "scripts": {
-    "start:example": "node examples/listTopics.js"
+    "start:example": "node example/index.js"
   },
   "keywords": [],
   "author": "",
@@ -13,9 +13,7 @@
     "@aws-sdk/client-sts": "^3.21.0",
     "@aws-sdk/credential-provider-node": "^3.21.0",
     "@aws-sdk/hash-node": "^3.20.0",
-    "@aws-sdk/signature-v4": "^3.20.0",
-    "dotenv": "^10.0.0",
-    "kafkajs": "git://github.com/tulios/kafkajs.git#840-allow-injecting-authentication-mechanisms"
+    "@aws-sdk/signature-v4": "^3.20.0"
   },
   "devDependencies": {}
 }

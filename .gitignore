@@ -3,3 +3,10 @@
 /.idea/
 .env
 /build/
+
+/example/node_modules/
+/example/coverage/
+/example/.idea/
+/example/.env
+/example/build/
+
