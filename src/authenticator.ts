@@ -1,7 +1,11 @@
 import {AuthenticationMechanismCreator} from "kafkajs";
 import {AuthenticationPayload, AuthenticationPayloadCreator} from "./AuthenticationPayloadCreator";
 
-const Authenticator: AuthenticationMechanismCreator<any> = ({ sasl, connection, logger, saslAuthenticate }) => {
+type Options = {
+    region: string;
+}
+
+const Authenticator: AuthenticationMechanismCreator<Options, any> = ({ sasl, connection, logger, saslAuthenticate }) => {
     const INT32_SIZE = 4
 
     const request = (payload: AuthenticationPayload) => ({
@@ -30,10 +34,9 @@ const Authenticator: AuthenticationMechanismCreator<any> = ({ sasl, connection, 
         authenticate: async () => {
             const { host, port } = connection
             const broker = `${host}:${port}`
-            const payloadFactory = new AuthenticationPayloadCreator()
+            const payloadFactory = new AuthenticationPayloadCreator({ region: sasl.region })
 
             try {
-                logger.info(`Authenticate with ${sasl.mechanism}`, { broker })
                 const payload = await payloadFactory.create({ brokerHost: host });
                 console.log('Authenticate event #1', payload)
                 const authenticateResponse = await saslAuthenticate({ request: request(payload), response });
@@ -47,7 +50,7 @@ const Authenticator: AuthenticationMechanismCreator<any> = ({ sasl, connection, 
                 logger.info('SASL Simon authentication successful', { broker })
             } catch (e) {
                 const error = new Error(
-                    `SASL ${sasl.mechanism} authentication failed: ${e.message}`
+                    `SASL ${sasl} authentication failed: ${e.message}`
                 )
                 logger.error(error.message, { broker })
                 throw error

@@ -1,6 +1,8 @@
 import { SignatureV4 } from '@aws-sdk/signature-v4'
-const { defaultProvider } = require('@aws-sdk/credential-provider-node');
+import * as credentialProvider from "@aws-sdk/credential-provider-node";
+// import { getDefaultRoleAssumerWithWebIdentity} from "@aws-sdk/client-sts";
 const { getDefaultRoleAssumerWithWebIdentity } = require('@aws-sdk/client-sts');
+
 import { createHash } from 'crypto'
 import {Sha256HashConstructor} from "./Sha256Constructor";
 
@@ -18,10 +20,9 @@ export type AuthenticationPayload = {
     "x-amz-signature": string,
 }
 
-const REGION = 'us-east-1'
 const SERVICE = 'kafka-cluster'
 const SIGNED_HEADERS = 'host'
-const HASHED_PAYLOAD = 'change_later' // todo
+const HASHED_PAYLOAD = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
 const ALGORITHM = "AWS4-HMAC-SHA256"
 const ACTION = "kafka-cluster:Connect"
 const EXPIRES_IN = "900"
@@ -30,15 +31,17 @@ const VERSION = "2020_10_22"
 export class AuthenticationPayloadCreator {
     private readonly provider: any
     private readonly signature: SignatureV4;
+    private readonly region: string;
 
-    constructor () {
-        this.provider = defaultProvider({
+    constructor ({ region }: { region: string}) {
+        this.region = region;
+        this.provider = credentialProvider.defaultProvider({
             roleAssumerWithWebIdentity: getDefaultRoleAssumerWithWebIdentity,
         });
 
         this.signature = new SignatureV4({
             credentials: this.provider,
-            region: REGION,
+            region: this.region,
             service: SERVICE,
             applyChecksum: false,
             uriEscapePath: true,
@@ -46,12 +49,12 @@ export class AuthenticationPayloadCreator {
         });
     }
 
-    timestampYYYYmmDDFormat (date: string | number | Date): string {
+    private timestampYYYYmmDDFormat (date: string | number | Date): string {
         const d = new Date(date);
         return this.timestampYYYYmmDDTHHMMSSZFormat(d).substring(0, 8)
     }
 
-    timestampYYYYmmDDTHHMMSSZFormat (date: string | number | Date): string {
+    private timestampYYYYmmDDTHHMMSSZFormat (date: string | number | Date): string {
         const d = new Date(date);
         return d.toISOString()
             .replace(/[-.:]/g,'')
@@ -59,25 +62,22 @@ export class AuthenticationPayloadCreator {
             .concat("Z")
     }
 
-    // TESTED
-    generateCanonicalHeaders (brokerHost: string): string {
+    private generateCanonicalHeaders (brokerHost: string): string {
         return `host:${brokerHost}\n`
     }
 
-    // TESTED
-    generateXAmzCredential (accessKeyId: string, dateString: string): string {
-        return `${accessKeyId}/${dateString}/${REGION}/${SERVICE}/aws4_request`
+    private generateXAmzCredential (accessKeyId: string, dateString: string): string {
+        return `${accessKeyId}/${dateString}/${this.region}/${SERVICE}/aws4_request`
     }
 
-    generateStringToSign (date: number | string | Date, canonicalRequest: string): string {
+    private generateStringToSign (date: number | string | Date, canonicalRequest: string): string {
         return `${ALGORITHM}
 ${this.timestampYYYYmmDDTHHMMSSZFormat(date)}
-${this.timestampYYYYmmDDFormat(date)}/${REGION}/${SERVICE}/aws4_request
+${this.timestampYYYYmmDDFormat(date)}/${this.region}/${SERVICE}/aws4_request
 ${createHash('sha256').update(canonicalRequest, 'utf8').digest('hex')}`
     }
 
-    // TESTED
-    generateCanonicalQueryString (dateString: string, xAmzCredential: string, sessionToken: string): string {
+    private generateCanonicalQueryString (dateString: string, xAmzCredential: string, sessionToken: string): string {
         let canonicalQueryString = "";
         canonicalQueryString += `${encodeURIComponent("Action")}=${encodeURIComponent(ACTION)}&`;
         canonicalQueryString += `${encodeURIComponent("X-Amz-Algorithm")}=${encodeURIComponent(ALGORITHM)}&`;
@@ -90,8 +90,7 @@ ${createHash('sha256').update(canonicalRequest, 'utf8').digest('hex')}`
         return canonicalQueryString
     }
 
-    // TESTED
-    generateCanonicalRequest (canonicalQueryString: string, canonicalHeaders: string, signedHeaders: string, hashedPayload: string): string {
+    private generateCanonicalRequest (canonicalQueryString: string, canonicalHeaders: string, signedHeaders: string, hashedPayload: string): string {
         return "GET\n"+
             "/\n"+
             canonicalQueryString+"\n"+
@@ -101,7 +100,8 @@ ${createHash('sha256').update(canonicalRequest, 'utf8').digest('hex')}`
     };
 
     // TESTED
-    async create (options: { brokerHost: string}): Promise<AuthenticationPayload> {
+    public async create (options: { brokerHost: string }): Promise<AuthenticationPayload> {
+
         const { brokerHost } = options;
 
         if (!brokerHost) {
