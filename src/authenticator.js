@@ -1,14 +1,9 @@
-import {AuthenticationMechanismCreator} from "kafkajs";
-import {AuthenticationPayload, AuthenticationPayloadCreator} from "./AuthenticationPayloadCreator";
+const { AuthenticationPayloadCreator } = require("./AuthenticationPayloadCreator");
 
-type Options = {
-    region: string;
-}
-
-const authenticator: AuthenticationMechanismCreator<Options, any> = ({ sasl, connection, logger, saslAuthenticate }) => {
+const authenticator = ({ sasl, connection, logger, saslAuthenticate }) => {
     const INT32_SIZE = 4
 
-    const request = (payload: AuthenticationPayload) => ({
+    const request = (payload) => ({
         encode: () => {
             const stringifiedPayload = JSON.stringify(payload);
             const byteLength = Buffer.byteLength(stringifiedPayload, 'utf8')
@@ -20,12 +15,12 @@ const authenticator: AuthenticationMechanismCreator<Options, any> = ({ sasl, con
     })
 
     const response = {
-        decode: (rawData: Buffer) => {
+        decode: (rawData) => {
             const byteLength = rawData.readInt32BE(0)
             return rawData.slice(INT32_SIZE, INT32_SIZE + byteLength)
         },
 
-        parse: (data: Buffer) => {
+        parse: (data) => {
             return data.toString()
         },
     }
@@ -60,4 +55,4 @@ const authenticator: AuthenticationMechanismCreator<Options, any> = ({ sasl, con
     }
 }
 
-export default authenticator
+module.exports = authenticator;
