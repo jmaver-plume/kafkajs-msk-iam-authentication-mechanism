@@ -11,6 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^10.0.0",
-    "kafkajs": "^1.15.0"
+    "kafkajs": "git://github.com/tulios/kafkajs.git#840-allow-injecting-authentication-mechanisms"
   }
 }
