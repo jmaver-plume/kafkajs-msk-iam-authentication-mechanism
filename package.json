@@ -4,7 +4,8 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "start:example": "node example/index.js"
+    "start:example": "node example/index.js",
+    "lint": "eslint --fix ./src/**/*.js"
   },
   "keywords": [],
   "author": "",
@@ -18,5 +19,11 @@
     "jest": "^27.0.6",
     "sinon": "^11.1.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "^7.30.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0"
+  }
 }
