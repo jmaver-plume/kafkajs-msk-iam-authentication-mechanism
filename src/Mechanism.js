@@ -1,6 +1,6 @@
 const { AuthenticationPayloadCreator } = require("./AuthenticationPayloadCreator");
 
-const authenticator = ({ sasl, connection, logger, saslAuthenticate }) => {
+const Mechanism = ({ sasl, connection, logger, saslAuthenticate }) => {
     const INT32_SIZE = 4
 
     const request = (payload) => ({
@@ -56,4 +56,4 @@ const authenticator = ({ sasl, connection, logger, saslAuthenticate }) => {
     }
 }
 
-module.exports = authenticator;
+module.exports = { Mechanism };
