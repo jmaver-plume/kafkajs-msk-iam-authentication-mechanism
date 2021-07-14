@@ -1,5 +1,5 @@
 const { Kafka, AuthenticationMechanisms } = require('kafkajs')
-const { Mechanism, Type } = require('../src')
+const { Mechanism, Type } = require('../../src')
 AuthenticationMechanisms[Type] = () => Mechanism
 
 const kafka = new Kafka({
@@ -8,7 +8,8 @@ const kafka = new Kafka({
   ssl: true,
   sasl: {
     mechanism: Type,
-    region: process.env.REGION
+    region: process.env.REGION,
+    ttl: process.env.TTL
   }
 })
 

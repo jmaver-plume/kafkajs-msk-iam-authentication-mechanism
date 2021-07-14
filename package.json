@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "lint": "eslint --fix ./src/**/*.js ./example/index.js"
+    "lint": "eslint --fix ./src/**/*.js example/simple/index.js"
   },
   "keywords": [],
   "author": "",

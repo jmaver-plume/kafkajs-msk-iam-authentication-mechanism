@@ -5,7 +5,7 @@
 .DS_Store
 /src/.DS_Store
 
-/example/node_modules/
+/example/simple/node_modules/
 /example/coverage/
 /example/.idea/
 /example/.env
