@@ -23,6 +23,15 @@ const admin = kafka.admin()
 app.use(express.json())
 
 app.use((req, res, next) => {
+  console.log({
+    body: req.body,
+    path: req.path,
+    method: req.method
+  })
+  next()
+})
+
+app.use((req, res, next) => {
   req.producer = producer
   next()
 })
