@@ -42,9 +42,10 @@ app.post('/provision', async (req, res) => {
     if (!topics) {
       return res.sendStatus(400)
     }
+    const kafkaTopics = topics.map(topic => ({ topic }))
     await admin.connect()
     await admin.createTopics({
-      topics: [topics.map(topic => ({ topic }))]
+      topics: kafkaTopics
     })
   } catch (err) {
     console.error(err)
