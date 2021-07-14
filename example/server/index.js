@@ -18,10 +18,29 @@ const kafka = new Kafka({
 })
 
 const producer = kafka.producer()
+const admin = kafka.admin()
+
+app.use(express.json())
 
 app.use((req, res, next) => {
-  res.producer = producer
+  req.producer = producer
   next()
+})
+
+app.post('/provision', async (req, res) => {
+  try {
+    const { body: { topics } } = req
+    if (!topics) {
+      return res.sendStatus(400)
+    }
+    await admin.connect()
+    await admin.createTopics({
+      topics: [topics.map(topic => ({ topic }))]
+    })
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
 })
 
 app.post('/', async (req, res) => {
