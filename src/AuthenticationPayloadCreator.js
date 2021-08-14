@@ -9,11 +9,12 @@ const SIGNED_HEADERS = 'host'
 const HASHED_PAYLOAD = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
 const ALGORITHM = 'AWS4-HMAC-SHA256'
 const ACTION = 'kafka-cluster:Connect'
-const EXPIRES_IN = '900'
 
 class AuthenticationPayloadCreator {
-  constructor ({ region }) {
+  constructor ({ region, ttl, userAgent }) {
     this.region = region
+    this.ttl = ttl || '900'
+    this.userAgent = userAgent || 'MSK_IAM_v1.0.0'
     this.provider = defaultProvider({
       roleAssumerWithWebIdentity: getDefaultRoleAssumerWithWebIdentity
     })
@@ -62,7 +63,7 @@ ${createHash('sha256').update(canonicalRequest, 'utf8').digest('hex')}`
     canonicalQueryString += `${encodeURIComponent('X-Amz-Algorithm')}=${encodeURIComponent(ALGORITHM)}&`
     canonicalQueryString += `${encodeURIComponent('X-Amz-Credential')}=${encodeURIComponent(xAmzCredential)}&`
     canonicalQueryString += `${encodeURIComponent('X-Amz-Date')}=${encodeURIComponent(dateString)}&`
-    canonicalQueryString += `${encodeURIComponent('X-Amz-Expires')}=${encodeURIComponent(EXPIRES_IN)}&`
+    canonicalQueryString += `${encodeURIComponent('X-Amz-Expires')}=${encodeURIComponent(this.ttl)}&`
     canonicalQueryString += `${encodeURIComponent('X-Amz-Security-Token')}=${encodeURIComponent(sessionToken)}&`
     canonicalQueryString += `${encodeURIComponent('X-Amz-SignedHeaders')}=${encodeURIComponent(SIGNED_HEADERS)}`
 
@@ -103,7 +104,7 @@ ${createHash('sha256').update(canonicalRequest, 'utf8').digest('hex')}`
 
     return {
       version: '2020_10_22',
-      'user-agent': 'test-api',
+      'user-agent': this.userAgent,
       host: brokerHost,
       action: ACTION,
       'x-amz-credential': xAmzCredential,
@@ -111,7 +112,7 @@ ${createHash('sha256').update(canonicalRequest, 'utf8').digest('hex')}`
       'x-amz-date': this.timestampYYYYmmDDTHHMMSSZFormat(now),
       'x-amz-security-token': sessionToken,
       'x-amz-signedheaders': SIGNED_HEADERS,
-      'x-amz-expires': EXPIRES_IN,
+      'x-amz-expires': this.ttl,
       'x-amz-signature': signature
     }
   }
