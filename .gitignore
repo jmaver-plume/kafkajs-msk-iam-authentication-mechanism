@@ -11,3 +11,5 @@
 /example/.env
 /example/build/
 /example/.DS_Store
+
+/example/server/node_modules/

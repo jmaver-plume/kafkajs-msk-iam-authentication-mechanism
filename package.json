@@ -1,14 +1,28 @@
 {
-  "name": "kafka-msk-iam-demo",
+  "name": "@jm18457/kafkajs-msk-iam-authentication-mechanism",
   "version": "1.0.0",
-  "description": "",
+  "description": "Authentication mechanism for AWS MSK IAM for kafkajs.",
+  "keywords": [
+    "kafkajs",
+    "msk",
+    "iam",
+    "authentication"
+  ],
+  "homepage": "https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism",
+  "bugs": {
+    "url": "https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/issues"
+  },
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint --fix ./src/**/*.js example/simple/index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "ttps://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism.git"
+  },
+  "author": "Jaka Maver",
+  "license": "MIT",
+  "private": false,
   "dependencies": {
     "@aws-sdk/client-sts": "^3.21.0",
     "@aws-sdk/credential-provider-node": "^3.21.0",
