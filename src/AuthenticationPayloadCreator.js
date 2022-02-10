@@ -16,7 +16,7 @@ class AuthenticationPayloadCreator {
     this.ttl = ttl || '900'
     this.userAgent = userAgent || 'MSK_IAM_v1.0.0'
     this.provider = defaultProvider({
-      roleAssumerWithWebIdentity: getDefaultRoleAssumerWithWebIdentity
+      roleAssumerWithWebIdentity: getDefaultRoleAssumerWithWebIdentity()
     })
 
     this.signature = new SignatureV4({
