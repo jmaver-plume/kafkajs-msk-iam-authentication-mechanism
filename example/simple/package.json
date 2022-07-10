@@ -8,6 +8,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "kafkajs": "git://github.com/tulios/kafkajs.git#840-allow-injecting-authentication-mechanisms"
+    "kafkajs": "^2.2.0-beta.0"
   }
 }

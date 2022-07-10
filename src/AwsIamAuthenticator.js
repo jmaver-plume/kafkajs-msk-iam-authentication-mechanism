@@ -1,6 +1,6 @@
 const { AuthenticationPayloadCreator } = require('./AuthenticationPayloadCreator')
 
-const Mechanism = ({ sasl, connection, logger, saslAuthenticate }) => {
+const awsIamAuthenticator = (region, ttl) => ({ sasl, host, port, logger, saslAuthenticate }) => {
   const INT32_SIZE = 4
 
   const request = (payload) => ({
@@ -27,9 +27,8 @@ const Mechanism = ({ sasl, connection, logger, saslAuthenticate }) => {
 
   return {
     authenticate: async () => {
-      const { host, port } = connection
       const broker = `${host}:${port}`
-      const payloadFactory = new AuthenticationPayloadCreator({ region: sasl.region })
+      const payloadFactory = new AuthenticationPayloadCreator({ region, ttl })
 
       try {
         const payload = await payloadFactory.create({ brokerHost: host })
@@ -49,4 +48,4 @@ const Mechanism = ({ sasl, connection, logger, saslAuthenticate }) => {
   }
 }
 
-module.exports = { Mechanism }
+module.exports = { awsIamAuthenticator }

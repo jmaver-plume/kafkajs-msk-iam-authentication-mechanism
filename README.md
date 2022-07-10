@@ -4,8 +4,8 @@
 
 ```javascript
 const { Kafka, AuthenticationMechanisms } = require('kafkajs')
-const { Mechanism, Type } = require('kafka-msk-iam-demo')
-AuthenticationMechanisms[Type] = () => Mechanism
+const { awsIamAuthenticator, Type } = require('kafka-msk-iam-demo')
+AuthenticationMechanisms[Type] = () => awsIamAuthenticator
 
 const kafka = new Kafka({
   brokers: process.env.BROKERS.split(','),
