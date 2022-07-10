@@ -2,10 +2,22 @@
 
 ## Installation
 
+You need to have `"kafkajs": "^2.2.0-beta.0"` installed.
+
+For more information look at https://github.com/tulios/kafkajs/issues/840#issuecomment-1177251826.
+
+```shell
+npm i kafkajs-msk-iam-authentication-mechanism 
+```
+
+### Setup
+
 ```javascript
-const { Kafka, AuthenticationMechanisms } = require('kafkajs')
-const { awsIamAuthenticator, Type } = require('kafka-msk-iam-demo')
-AuthenticationMechanisms[Type] = () => awsIamAuthenticator
+const { Kafka } = require('kafkajs')
+const {
+  awsIamAuthenticator,
+  Type
+} = require('kafkajs-msk-iam-authentication-mechanism')
 
 const kafka = new Kafka({
   brokers: process.env.BROKERS.split(','),
@@ -13,23 +25,12 @@ const kafka = new Kafka({
   ssl: true,
   sasl: {
     mechanism: Type,
-    region: process.env.REGION
+    authenticationProvider: awsIamAuthenticator(process.env.REGION, process.env.TTL)
   }
 })
-
-async function run () {
-  const admin = kafka.admin()
-  await admin.connect()
-  const topics = await admin.listTopics()
-  console.log('Topics: ', topics)
-  await admin.disconnect()
-}
-
-run()
-  .then(() => process.exit(0))
-  .catch((err) => {
-    console.error('Error: ', err)
-    process.exit(1)
-  })
-
 ```
+
+## Examples
+
+For working examples look at `example` folder.
+
