@@ -1,6 +1,6 @@
 {
   "name": "@jm18457/kafkajs-msk-iam-authentication-mechanism",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Authentication mechanism for AWS MSK IAM for kafkajs.",
   "keywords": [
     "kafkajs",
