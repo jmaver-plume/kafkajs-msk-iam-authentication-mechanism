@@ -7,7 +7,7 @@ You need to have `"kafkajs": "^2.2.0-beta.0"` installed.
 For more information look at https://github.com/tulios/kafkajs/issues/840#issuecomment-1177251826.
 
 ```shell
-npm i kafkajs-msk-iam-authentication-mechanism 
+npm i @jm18457/kafkajs-msk-iam-authentication-mechanism 
 ```
 
 ### Setup
@@ -17,7 +17,7 @@ const { Kafka } = require('kafkajs')
 const {
   awsIamAuthenticator,
   Type
-} = require('kafkajs-msk-iam-authentication-mechanism')
+} = require('@jm18457/kafkajs-msk-iam-authentication-mechanism')
 
 const kafka = new Kafka({
   brokers: process.env.BROKERS.split(','),
