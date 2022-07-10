@@ -1,6 +1,5 @@
-const { Kafka, AuthenticationMechanisms } = require('kafkajs')
-const { Mechanism, Type } = require('../../src')
-AuthenticationMechanisms[Type] = () => Mechanism
+const { Kafka } = require('kafkajs')
+const { awsIamAuthenticator, Type } = require('../../src')
 
 const kafka = new Kafka({
   brokers: process.env.BROKERS.split(','),
@@ -8,8 +7,7 @@ const kafka = new Kafka({
   ssl: true,
   sasl: {
     mechanism: Type,
-    region: process.env.REGION,
-    ttl: process.env.TTL
+    authenticationProvider: awsIamAuthenticator(process.env.REGION, process.env.TTL)
   }
 })
 
