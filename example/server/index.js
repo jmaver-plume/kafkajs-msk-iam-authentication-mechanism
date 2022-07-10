@@ -1,8 +1,10 @@
-const { Kafka, AuthenticationMechanisms } = require('kafkajs')
+const { Kafka } = require('kafkajs')
+const {
+  awsIamAuthenticator,
+  Type
+} = require('../../src')
 const express = require('express')
 const app = express()
-const { Mechanism, Type } = require('../../src')
-AuthenticationMechanisms[Type] = () => Mechanism
 
 const port = process.env.PORT || 3000
 
@@ -12,8 +14,7 @@ const kafka = new Kafka({
   ssl: true,
   sasl: {
     mechanism: Type,
-    region: process.env.REGION,
-    ttl: process.env.TTL
+    authenticationProvider: awsIamAuthenticator(process.env.REGION, process.env.TTL)
   }
 })
 
