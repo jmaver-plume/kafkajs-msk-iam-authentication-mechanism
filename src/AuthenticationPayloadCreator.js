@@ -65,8 +65,9 @@ ${createHash('sha256').update(canonicalRequest, 'utf8').digest('hex')}`
     canonicalQueryString += `${encodeURIComponent('X-Amz-Date')}=${encodeURIComponent(dateString)}&`
     canonicalQueryString += `${encodeURIComponent('X-Amz-Expires')}=${encodeURIComponent(this.ttl)}&`
 
-    if (sessionToken)
+    if (sessionToken) {
       canonicalQueryString += `${encodeURIComponent('X-Amz-Security-Token')}=${encodeURIComponent(sessionToken)}&`
+    }
 
     canonicalQueryString += `${encodeURIComponent('X-Amz-SignedHeaders')}=${encodeURIComponent(SIGNED_HEADERS)}`
 

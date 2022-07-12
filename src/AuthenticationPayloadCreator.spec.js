@@ -35,7 +35,7 @@ describe('AuthenticationPayloadCreator', () => {
 
       expect(payload).toHaveProperty('version', '2020_10_22')
       expect(payload).toHaveProperty('host', brokerHost)
-      expect(payload).toHaveProperty('user-agent', 'test-api')
+      expect(payload).toHaveProperty('user-agent', 'MSK_IAM_v1.0.0')
       expect(payload).toHaveProperty('action', 'kafka-cluster:Connect')
       expect(payload).toHaveProperty('x-amz-algorithm', 'AWS4-HMAC-SHA256')
       expect(payload).toHaveProperty('x-amz-credential', `${credentials.accessKeyId}/20210101/${region}/kafka-cluster/aws4_request`)
