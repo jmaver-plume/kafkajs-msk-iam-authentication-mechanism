@@ -27,7 +27,8 @@
     "@aws-sdk/client-sts": "^3.21.0",
     "@aws-sdk/credential-provider-node": "^3.21.0",
     "@aws-sdk/hash-node": "^3.20.0",
-    "@aws-sdk/signature-v4": "^3.20.0"
+    "@aws-sdk/signature-v4": "^3.20.0",
+    "kafkajs": "^2.2.0-beta.0"
   },
   "devDependencies": {
     "eslint": "^7.30.0",
