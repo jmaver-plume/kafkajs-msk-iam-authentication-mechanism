@@ -1,0 +1,71 @@
+---
+version: 2.1
+
+orbs:
+  node: circleci/node@5.0.2
+  aws-cli: circleci/aws-cli@3.1
+
+node-version: &node-version '16.14.2'
+
+jobs:
+  setup:
+    executor:
+      name: node/default
+      tag: *node-version
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - 'SHA256:rBzT/fin2ZMomNzc+4HgqLIthZpt4LhgW1yW7BcnEpE'
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+
+node-run-defaults: &node-run-defaults
+  pkg-manager: yarn
+  version: *node-version
+  requires:
+    - setup
+
+workflows:
+  test-build-publish:
+    jobs:
+      - setup
+      - node/run:
+          <<: *node-run-defaults
+          name: lint
+          yarn-run: lint
+      - node/run:
+          <<: *node-run-defaults
+          name: test
+          yarn-run: test
+      - node/run:
+          <<: *node-run-defaults
+          name: check-types
+          yarn-run: check-types
+      - node/run:
+          <<: *node-run-defaults
+          name: build
+          yarn-run: build
+          post-steps:
+            - persist_to_workspace:
+                root: .
+                paths:
+                  - dist
+      - node/run:
+          <<: *node-run-defaults
+          name: publish
+          setup:
+            - aws-cli/setup:
+                profile-name: WEB IDENTITY PROFILE
+                role-arn: 'arn:aws:iam::622627819221:role/trialspark-dist-uploader'
+                role-session-name: 'circleci-workflow'
+                session-duration: '1800'
+            - attach_workspace:
+                at: .
+          yarn-run: semantic-release
+          context:
+            - aws-auth
+          requires:
+            - lint
+            - test
+            - build
