@@ -14,7 +14,8 @@
   },
   "main": "src/index.js",
   "scripts": {
-    "lint": "eslint --fix ./src/**/*.js example/simple/index.js"
+    "lint": "eslint --fix ./src/**/*.js example/simple/index.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",

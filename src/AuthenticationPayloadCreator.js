@@ -14,7 +14,7 @@ class AuthenticationPayloadCreator {
   constructor ({ region, ttl, userAgent }) {
     this.region = region
     this.ttl = ttl || '900'
-    this.userAgent = userAgent || 'MSK_IAM_v1.0.0'
+    this.userAgent = userAgent || 'MSK_IAM'
     this.provider = defaultProvider({
       roleAssumerWithWebIdentity: getDefaultRoleAssumerWithWebIdentity({
         region: process.env.AWS_REGION ?? region
@@ -67,8 +67,7 @@ ${createHash('sha256').update(canonicalRequest, 'utf8').digest('hex')}`
     canonicalQueryString += `${encodeURIComponent('X-Amz-Date')}=${encodeURIComponent(dateString)}&`
     canonicalQueryString += `${encodeURIComponent('X-Amz-Expires')}=${encodeURIComponent(this.ttl)}&`
 
-    if (sessionToken)
-      canonicalQueryString += `${encodeURIComponent('X-Amz-Security-Token')}=${encodeURIComponent(sessionToken)}&`
+    if (sessionToken) { canonicalQueryString += `${encodeURIComponent('X-Amz-Security-Token')}=${encodeURIComponent(sessionToken)}&` }
 
     canonicalQueryString += `${encodeURIComponent('X-Amz-SignedHeaders')}=${encodeURIComponent(SIGNED_HEADERS)}`
 
