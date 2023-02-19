@@ -1,7 +1,7 @@
 {
   "name": "@jm18457/kafkajs-msk-iam-authentication-mechanism",
   "version": "2.0.3",
-  "description": "Authentication mechanism for AWS MSK IAM for kafkajs.",
+  "description": "Authentication mechanism for AWS MSK IAM for KafkaJS.",
   "keywords": [
     "kafkajs",
     "msk",
@@ -14,7 +14,8 @@
   },
   "main": "src/index.js",
   "scripts": {
-    "lint": "eslint --fix ./src/**/*.js example/simple/index.js"
+    "lint": "eslint --fix ./src/**/*.js example/simple/index.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
