@@ -20,8 +20,8 @@ const {
 } = require('@jm18457/kafkajs-msk-iam-authentication-mechanism')
 
 const kafka = new Kafka({
-  brokers: process.env.BROKERS.split(','),
-  clientId: 'consumer',
+  brokers: ['kafka1:9092', 'kafka2:9092'],
+  clientId: 'my-app',
   ssl: true,
   sasl: {
     mechanism: Type,
