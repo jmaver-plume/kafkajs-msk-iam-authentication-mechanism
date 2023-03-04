@@ -1,27 +1,26 @@
-const { Kafka } = require('kafkajs')
-const { awsIamAuthenticator, Type } = require('../../src')
+const { Kafka } = require("kafkajs");
+const {
+  createMechanism,
+} = require("@jm18457/kafkajs-msk-iam-authentication-mechanism");
 
 const kafka = new Kafka({
-  brokers: process.env.BROKERS.split(','),
-  clientId: 'consumer',
+  brokers: process.env.BROKERS.split(","),
+  clientId: "consumer",
   ssl: true,
-  sasl: {
-    mechanism: Type,
-    authenticationProvider: awsIamAuthenticator({ region: process.env.REGION })
-  }
-})
+  sasl: createMechanism({ region: process.env.REGION }),
+});
 
-async function run () {
-  const admin = kafka.admin()
-  await admin.connect()
-  const topics = await admin.listTopics()
-  console.log('Topics: ', topics)
-  await admin.disconnect()
+async function run() {
+  const admin = kafka.admin();
+  await admin.connect();
+  const topics = await admin.listTopics();
+  console.log("Topics: ", topics);
+  await admin.disconnect();
 }
 
 run()
   .then(() => process.exit(0))
   .catch((err) => {
-    console.error('Error: ', err)
-    process.exit(1)
-  })
+    console.error("Error: ", err);
+    process.exit(1);
+  });
