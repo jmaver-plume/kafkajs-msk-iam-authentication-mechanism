@@ -7,7 +7,7 @@ const kafka = new Kafka({
   ssl: true,
   sasl: {
     mechanism: Type,
-    authenticationProvider: awsIamAuthenticator(process.env.REGION, process.env.TTL)
+    authenticationProvider: awsIamAuthenticator({ region: process.env.REGION })
   }
 })
 

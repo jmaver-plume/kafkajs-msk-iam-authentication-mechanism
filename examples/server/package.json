@@ -10,6 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
-    "kafkajs": "^2.2.0-beta.0"
+    "kafkajs": "^2.2.4"
   }
 }
