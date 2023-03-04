@@ -1,6 +1,6 @@
 const { AuthenticationPayloadCreator } = require('./AuthenticationPayloadCreator')
 
-const awsIamAuthenticator = (region, ttl) => ({ sasl, host, port, logger, saslAuthenticate }) => {
+const awsIamAuthenticator = (options) => ({ sasl, host, port, logger, saslAuthenticate }) => {
   const INT32_SIZE = 4
 
   const request = (payload) => ({
@@ -28,7 +28,7 @@ const awsIamAuthenticator = (region, ttl) => ({ sasl, host, port, logger, saslAu
   return {
     authenticate: async () => {
       const broker = `${host}:${port}`
-      const payloadFactory = new AuthenticationPayloadCreator({ region, ttl })
+      const payloadFactory = new AuthenticationPayloadCreator(options)
 
       try {
         const payload = await payloadFactory.create({ brokerHost: host })
@@ -39,7 +39,7 @@ const awsIamAuthenticator = (region, ttl) => ({ sasl, host, port, logger, saslAu
           throw new Error('Invalid response from broker')
         }
 
-        logger.info('SASL Simon authentication successful', { broker })
+        logger.info('SASL AWS_MSK_IAM authentication successful', { broker })
       } catch (error) {
         logger.error(error.message, { broker })
         throw error

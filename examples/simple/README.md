@@ -1,13 +1,13 @@
 # Example
 
-Runs a simple example which lists kafka kafka topics.
+Runs a simple example which lists kafka topics.
 
 ## Run
 
 ```bash
 # cd project root
 npm install
-cd example
+cd examples/simple
 npm install
 # Substitute with valid brokers and region
 # Run inside EC2 or ECS instance in same VPC as MSK cluster

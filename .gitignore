@@ -5,11 +5,11 @@
 .DS_Store
 /src/.DS_Store
 
-/example/simple/node_modules/
-/example/coverage/
-/example/.idea/
-/example/.env
-/example/build/
-/example/.DS_Store
+/examples/simple/node_modules/
+/examples/coverage/
+/examples/.idea/
+/examples/.env
+/examples/build/
+/examples/.DS_Store
 
-/example/server/node_modules/
+/examples/server/node_modules/
