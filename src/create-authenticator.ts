@@ -33,8 +33,12 @@ export const createAuthenticator =
         }
 
         logger.info(`SASL ${TYPE} authentication successful`, { broker });
-      } catch (error: any) {
-        logger.error(error.message, { broker });
+      } catch (error) {
+        if (error instanceof Error) {
+          logger.error(error?.message, { broker });
+        } else if (typeof error === "string") {
+          logger.error(error, { broker });
+        }
         throw error;
       }
     },

@@ -17,7 +17,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint ./src/**/*.js examples/simple/index.js",
+    "lint": "eslint ./src/**/*.ts",
     "test": "jest"
   },
   "repository": {
