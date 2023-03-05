@@ -57,18 +57,6 @@ For working examples look at the `examples` folder.
 
 ## API Reference
 
-### References
-
-#### TYPE
-
-Renames and re-exports [Type](README.md#type-1)
-
-___
-
-#### createAuthenticator
-
-Renames and re-exports [awsIamAuthenticator](README.md#awsiamauthenticator)
-
 ### Type Aliases
 
 #### Options
@@ -86,9 +74,19 @@ Renames and re-exports [awsIamAuthenticator](README.md#awsiamauthenticator)
 
 ##### Defined in
 
-[create-mechanism.ts:5](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/blob/13b1c03/src/create-mechanism.ts#L5)
+[create-mechanism.ts:5](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/blob/main/src/create-mechanism.ts#L5)
 
 ### Variables
+
+#### TYPE
+
+• `Const` **TYPE**: ``"AWS_MSK_IAM"``
+
+##### Defined in
+
+[constants.ts:3](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/blob/main/src/constants.ts#L3)
+
+___
 
 #### Type
 
@@ -96,7 +94,7 @@ Renames and re-exports [awsIamAuthenticator](README.md#awsiamauthenticator)
 
 ##### Defined in
 
-[constants.ts:3](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/blob/13b1c03/src/constants.ts#L3)
+[index.ts:10](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/blob/main/src/index.ts#L10)
 
 ### Functions
 
@@ -128,7 +126,39 @@ Renames and re-exports [awsIamAuthenticator](README.md#awsiamauthenticator)
 
 ##### Defined in
 
-[create-authenticator.ts:11](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/blob/13b1c03/src/create-authenticator.ts#L11)
+[create-authenticator.ts:11](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/blob/main/src/create-authenticator.ts#L11)
+
+___
+
+#### createAuthenticator
+
+▸ **createAuthenticator**(`options`): (`args`: `AuthenticationProviderArgs`) => `Authenticator`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `options` | [`Options`](README.md#options) |
+
+##### Returns
+
+`fn`
+
+▸ (`args`): `Authenticator`
+
+###### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `args` | `AuthenticationProviderArgs` |
+
+###### Returns
+
+`Authenticator`
+
+##### Defined in
+
+[create-authenticator.ts:11](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/blob/main/src/create-authenticator.ts#L11)
 
 ___
 
@@ -149,6 +179,6 @@ ___
 
 ##### Defined in
 
-[create-mechanism.ts:26](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/blob/13b1c03/src/create-mechanism.ts#L26)
+[create-mechanism.ts:26](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/blob/main/src/create-mechanism.ts#L26)
 
 
