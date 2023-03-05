@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/compare/v3.0.0...v3.1.0) (2023-03-05)
+
+
+### Features
+
+* convert to typescript ([#31](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/issues/31)) ([21c68dc](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/commit/21c68dc598056b6906d66be843e3ee8766f72f4f))
+
 ## [3.0.0](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/compare/v2.1.1...v3.0.0) (2023-03-04)
 
 
