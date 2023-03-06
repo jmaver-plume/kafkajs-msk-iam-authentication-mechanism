@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.1](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/compare/v3.1.0...v3.1.1) (2023-03-06)
+
+
+### Bug Fixes
+
+* Add missing npm build in npm-publish.yml ([#33](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/issues/33)) ([bf3119f](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/commit/bf3119f17ee9215a53c865b5205bffcd248ab82c))
+
 ## [3.1.0](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/compare/v3.0.0...v3.1.0) (2023-03-05)
 
 
