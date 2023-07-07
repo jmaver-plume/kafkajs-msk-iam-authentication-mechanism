@@ -29,9 +29,9 @@
   "private": false,
   "dependencies": {
     "@aws-crypto/sha256-js": "^4.0.0",
-    "@aws-sdk/credential-providers": "^3.282.0",
-    "@aws-sdk/hash-node": "^3.272.0",
-    "@aws-sdk/signature-v4": "^3.282.0"
+    "@aws-sdk/credential-providers": "^3.363.0",
+    "@aws-sdk/hash-node": "^3.357.0",
+    "@aws-sdk/signature-v4": "^3.357.0"
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",
