@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.2](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/compare/v3.1.1...v3.1.2) (2023-07-07)
+
+
+### Bug Fixes
+
+* Update AWS libraries to pick up a version of fast-xml-parser that addresses CVE-2023-34104. ([#37](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/issues/37)) ([b2cdc33](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/commit/b2cdc330378134683694d8d7c6858f8b536e9ae3))
+
 ## [3.1.1](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/compare/v3.1.0...v3.1.1) (2023-03-06)
 
 
