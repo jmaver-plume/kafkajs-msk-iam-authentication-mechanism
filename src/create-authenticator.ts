@@ -5,6 +5,7 @@ import {
   createSaslAuthenticationResponse,
   TYPE,
   Options,
+  executeCredentialsProvider,
 } from ".";
 
 export const createAuthenticator =
@@ -13,8 +14,9 @@ export const createAuthenticator =
     authenticate: async () => {
       const { host, port, logger, saslAuthenticate } = args;
       const broker = `${host}:${port}`;
-      const payloadFactory = new CreatePayload(options);
-
+      const executedOptions = await executeCredentialsProvider(options);
+      const payloadFactory = new CreatePayload(executedOptions);
+      
       try {
         const payload = await payloadFactory.create({ brokerHost: host });
         const authenticateResponse = await saslAuthenticate({

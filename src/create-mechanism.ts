@@ -30,3 +30,12 @@ export const createMechanism = (
   mechanism,
   authenticationProvider: createAuthenticator(options),
 });
+
+export const executeCredentialsProvider = async (
+  executeOptions: Options,
+): Promise<Options> => {
+  let options:Options  = {...executeOptions};
+  options.credentials = typeof executeOptions.credentials === "function"
+    ? await executeOptions.credentials() : executeOptions.credentials;
+    return options;
+};
