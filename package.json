@@ -36,6 +36,9 @@
     "@smithy/signature-v4": "^5.4.1",
     "@smithy/types": "^4.14.1"
   },
+  "peerDependencies": {
+    "kafkajs": ">=2.2.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.29.0",
     "@babel/preset-env": "^7.29.5",
