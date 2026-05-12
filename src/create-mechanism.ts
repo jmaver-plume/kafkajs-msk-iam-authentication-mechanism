@@ -1,5 +1,5 @@
 import { Mechanism } from "kafkajs";
-import { AwsCredentialIdentity, Provider } from "@aws-sdk/types";
+import { AwsCredentialIdentity, Provider } from "@smithy/types";
 import { TYPE, createAuthenticator } from ".";
 
 export type Options = {
