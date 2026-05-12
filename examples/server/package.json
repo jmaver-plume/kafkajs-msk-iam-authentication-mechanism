@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^5.2.1",
     "kafkajs": "^2.2.4"
   }
 }
