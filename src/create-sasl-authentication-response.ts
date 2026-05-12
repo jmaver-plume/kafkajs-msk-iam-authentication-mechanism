@@ -1,5 +1,5 @@
-import { SaslAuthenticationResponse } from "kafkajs";
-import { INT32_SIZE } from ".";
+import type { SaslAuthenticationResponse } from "kafkajs";
+import { INT32_SIZE } from "./constants";
 
 /** @internal */
 export const createSaslAuthenticationResponse: SaslAuthenticationResponse<unknown> =

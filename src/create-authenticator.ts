@@ -1,11 +1,9 @@
-import { AuthenticationProviderArgs, Authenticator } from "kafkajs";
-import {
-  CreatePayload,
-  createSaslAuthenticationRequest,
-  createSaslAuthenticationResponse,
-  TYPE,
-  Options,
-} from ".";
+import type { AuthenticationProviderArgs, Authenticator } from "kafkajs";
+import { TYPE } from "./constants";
+import { CreatePayload } from "./create-payload";
+import { createSaslAuthenticationRequest } from "./create-sasl-authentication-request";
+import { createSaslAuthenticationResponse } from "./create-sasl-authentication-response";
+import type { Options } from "./create-mechanism";
 
 export const createAuthenticator =
   (options: Options) =>

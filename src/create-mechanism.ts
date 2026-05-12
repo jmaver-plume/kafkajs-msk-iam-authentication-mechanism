@@ -1,6 +1,7 @@
-import { Mechanism } from "kafkajs";
-import { AwsCredentialIdentity, Provider } from "@smithy/types";
-import { TYPE, createAuthenticator } from ".";
+import type { Mechanism } from "kafkajs";
+import type { AwsCredentialIdentity, Provider } from "@smithy/types";
+import { TYPE } from "./constants";
+import { createAuthenticator } from "./create-authenticator";
 
 export type Options = {
   /**

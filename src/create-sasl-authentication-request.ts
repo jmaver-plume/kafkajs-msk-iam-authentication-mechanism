@@ -1,5 +1,6 @@
-import { SaslAuthenticationRequest } from "kafkajs";
-import { Payload, INT32_SIZE } from ".";
+import type { SaslAuthenticationRequest } from "kafkajs";
+import { INT32_SIZE } from "./constants";
+import type { Payload } from "./create-payload";
 
 /** @internal */
 export const createSaslAuthenticationRequest = (

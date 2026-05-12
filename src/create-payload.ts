@@ -1,4 +1,4 @@
-import { AwsCredentialIdentity, Provider } from "@smithy/types";
+import type { AwsCredentialIdentity, Provider } from "@smithy/types";
 import { SignatureV4 } from "@smithy/signature-v4";
 import { fromNodeProviderChain } from "@aws-sdk/credential-providers";
 import { createHash } from "crypto";
@@ -9,8 +9,8 @@ import {
   HASHED_PAYLOAD,
   SERVICE,
   SIGNED_HEADERS,
-  Options,
-} from ".";
+} from "./constants";
+import type { Options } from "./create-mechanism";
 
 /** @internal */
 export type DateLike = number | Date | string;

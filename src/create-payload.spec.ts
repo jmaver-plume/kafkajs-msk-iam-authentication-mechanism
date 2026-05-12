@@ -1,5 +1,5 @@
 import MockDate from "mockdate";
-import { CreatePayload } from ".";
+import { CreatePayload } from "./create-payload";
 
 describe("CreatePayload", () => {
   const region = "us-east-1";
