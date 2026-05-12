@@ -1,5 +1,5 @@
-import { AwsCredentialIdentity, Provider } from "@aws-sdk/types";
-import { SignatureV4 } from "@aws-sdk/signature-v4";
+import { AwsCredentialIdentity, Provider } from "@smithy/types";
+import { SignatureV4 } from "@smithy/signature-v4";
 import { fromNodeProviderChain } from "@aws-sdk/credential-providers";
 import { createHash } from "crypto";
 import { Sha256 } from "@aws-crypto/sha256-js";
