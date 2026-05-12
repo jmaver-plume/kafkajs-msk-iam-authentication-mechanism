@@ -45,7 +45,7 @@
     "@babel/preset-typescript": "^7.28.5",
     "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",
-    "@types/node": "^25.7.0",
+    "@types/node": "^20.19.41",
     "@typescript-eslint/eslint-plugin": "^8.59.3",
     "@typescript-eslint/parser": "^8.59.3",
     "babel-jest": "^30.4.1",
