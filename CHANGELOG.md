@@ -1,5 +1,18 @@
 # Changelog
 
+## [4.0.0](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/compare/v3.1.2...v4.0.0) (2026-05-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* support createMechanism only
+* update dependencies ([#47](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/issues/47))
+
+### Features
+
+* support createMechanism only ([2a16646](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/commit/2a16646ba027d0310966d595ba3378f55edfaf68))
+* update dependencies ([#47](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/issues/47)) ([f2b9fe2](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/commit/f2b9fe287b85868b1fe8d5486205de33780b08fc))
+
 ## [3.1.2](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/compare/v3.1.1...v3.1.2) (2023-07-07)
 
 
