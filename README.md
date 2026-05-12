@@ -1,184 +1,69 @@
 # Kafka MSK IAM integration
 
+KafkaJS custom authentication mechanism for AWS MSK IAM.
+
 ## Installation
 
 Requires `kafkajs` version `2.2.0` or higher.
 
-For more information look at https://kafka.js.org/docs/next/configuration#custom-authentication-mechanisms.
-
 ```shell
-npm i @jm18457/kafkajs-msk-iam-authentication-mechanism 
+npm i @jm18457/kafkajs-msk-iam-authentication-mechanism
 ```
 
-### Setup
+## Usage
 
 ```javascript
-const { Kafka } = require('kafkajs')
+const { Kafka } = require("kafkajs");
 const {
-  createMechanism
-} = require('@jm18457/kafkajs-msk-iam-authentication-mechanism')
+  createMechanism,
+} = require("@jm18457/kafkajs-msk-iam-authentication-mechanism");
 
 const kafka = new Kafka({
-  brokers: ['kafka1:9092', 'kafka2:9092'],
-  clientId: 'my-app',
+  brokers: ["kafka1:9092", "kafka2:9092"],
+  clientId: "my-app",
   ssl: true,
-  sasl: createMechanism({ region: 'eu-central-1' })
-})
+  sasl: createMechanism({ region: "eu-central-1" }),
+});
 ```
 
-You can also use the old way of importing the library.
+You can also pass AWS credentials explicitly. If you do not provide
+credentials, the library uses the AWS SDK default credential provider chain.
 
 ```javascript
-const { Kafka } = require('kafkajs')
-const {
-  Type,
-  awsIamAuthenticator,
-} = require('@jm18457/kafkajs-msk-iam-authentication-mechanism')
-
-
-const provider = awsIamAuthenticator({
-    region: 'eu-central-1'
-})
+const { fromNodeProviderChain } = require("@aws-sdk/credential-providers");
 
 const kafka = new Kafka({
-  brokers: ['kafka1:9092', 'kafka2:9092'],
-  clientId: 'my-app',
+  brokers: ["kafka1:9092", "kafka2:9092"],
+  clientId: "my-app",
   ssl: true,
-  sasl: {
-    mechanism: Type,
-    authenticationProvider: provider
-  }
-})
+  sasl: createMechanism({
+    region: "eu-central-1",
+    credentials: fromNodeProviderChain(),
+  }),
+});
 ```
 
 ## Examples
 
 For working examples look at the `examples` folder.
 
-## API Reference
+## API
 
-### Type Aliases
+### createMechanism(options)
 
-#### Options
+Creates a KafkaJS SASL mechanism object for AWS MSK IAM authentication.
 
-Ƭ **Options**: `Object`
+```javascript
+sasl: createMechanism({
+  region: "eu-central-1",
+});
+```
 
-##### Type declaration
+### Options
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `credentials?` | `AwsCredentialIdentity` \| `Provider`<`AwsCredentialIdentity`\> | **`Default`** fromNodeProviderChain() |
-| `region` | `string` | The AWS region in which the Kafka broker exists. |
-| `ttl?` | `string` | Provides the time period, in seconds, for which the generated presigned URL is valid. **`Default`** 900 |
-| `userAgent?` | `string` | Is a string passed in by the client library to describe the client. **`Default`** MSK_IAM |
-
-##### Defined in
-
-[create-mechanism.ts:5](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/blob/main/src/create-mechanism.ts#L5)
-
-### Variables
-
-#### TYPE
-
-• `Const` **TYPE**: ``"AWS_MSK_IAM"``
-
-##### Defined in
-
-[constants.ts:3](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/blob/main/src/constants.ts#L3)
-
-___
-
-#### Type
-
-• `Const` **Type**: ``"AWS_MSK_IAM"``
-
-##### Defined in
-
-[index.ts:10](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/blob/main/src/index.ts#L10)
-
-### Functions
-
-#### awsIamAuthenticator
-
-▸ **awsIamAuthenticator**(`options`): (`args`: `AuthenticationProviderArgs`) => `Authenticator`
-
-##### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `options` | [`Options`](README.md#options) |
-
-##### Returns
-
-`fn`
-
-▸ (`args`): `Authenticator`
-
-###### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `args` | `AuthenticationProviderArgs` |
-
-###### Returns
-
-`Authenticator`
-
-##### Defined in
-
-[create-authenticator.ts:11](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/blob/main/src/create-authenticator.ts#L11)
-
-___
-
-#### createAuthenticator
-
-▸ **createAuthenticator**(`options`): (`args`: `AuthenticationProviderArgs`) => `Authenticator`
-
-##### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `options` | [`Options`](README.md#options) |
-
-##### Returns
-
-`fn`
-
-▸ (`args`): `Authenticator`
-
-###### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `args` | `AuthenticationProviderArgs` |
-
-###### Returns
-
-`Authenticator`
-
-##### Defined in
-
-[create-authenticator.ts:11](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/blob/main/src/create-authenticator.ts#L11)
-
-___
-
-#### createMechanism
-
-▸ **createMechanism**(`options`, `mechanism?`): `Mechanism`
-
-##### Parameters
-
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `options` | [`Options`](README.md#options) | `undefined` |
-| `mechanism` | `string` | `TYPE` |
-
-##### Returns
-
-`Mechanism`
-
-##### Defined in
-
-[create-mechanism.ts:26](https://github.com/jmaver-plume/kafkajs-msk-iam-authentication-mechanism/blob/main/src/create-mechanism.ts#L26)
-
-
+| Option        | Type                                                       | Required | Default                   | Description                                              |
+| ------------- | ---------------------------------------------------------- | -------- | ------------------------- | -------------------------------------------------------- |
+| `region`      | `string`                                                   | Yes      | -                         | AWS region where the MSK cluster exists.                 |
+| `ttl`         | `string`                                                   | No       | `"900"`                   | Presigned authentication payload lifetime in seconds.    |
+| `userAgent`   | `string`                                                   | No       | `"MSK_IAM"`               | User agent value included in the authentication payload. |
+| `credentials` | `AwsCredentialIdentity \| Provider<AwsCredentialIdentity>` | No       | `fromNodeProviderChain()` | AWS credentials or an AWS credentials provider.          |
